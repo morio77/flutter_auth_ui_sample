@@ -31,7 +31,24 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    print(state);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
             final result = await FlutterAuthUi.startUi(
               items: providers,
               tosAndPrivacyPolicy: TosAndPrivacyPolicy(
-                  tosUrl: 'https://www.google.com',
-                  privacyPolicyUrl: 'https://www.google.com'),
+                tosUrl: 'https://www.google.com',
+                privacyPolicyUrl: 'https://www.google.com',
+              ),
+              emailAuthOption: const EmailAuthOption(
+                enableMailLink: true,
+                handleURL: 'https://flutterauthuisample.page.link/test',
+              ),
             );
 
             print(result);
