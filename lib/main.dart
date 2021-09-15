@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_auth_ui/flutter_auth_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,23 +32,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    print(state);
-  }
+class _MyHomePageState extends State<MyHomePage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +60,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               ),
             );
 
-            print(result);
+            print(result); // ログインに成功したらtrue
+
+            print(auth.currentUser?.email);
+
+            await auth.signOut();
+
+            print(auth.currentUser?.email);
           },
           child: const Text('open'),
         ),
