@@ -33,7 +33,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  var isLogined = false;
+  final auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.userChanges().listen((user) {
+      if (user != null) {
+        print('uesr signed in');
+        isLogined = true;
+      } else {
+        print('user signed out');
+        isLogined = false;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,35 +63,53 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('flutter_auth_ui_test'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            final providers = [
-              AuthUiProvider.email,
-              AuthUiProvider.apple,
-            ];
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'ログイン状態：$isLogined',
+              style: const TextStyle(fontSize: 20),
+            ),
 
-            final result = await FlutterAuthUi.startUi(
-              items: providers,
-              tosAndPrivacyPolicy: TosAndPrivacyPolicy(
-                tosUrl: 'https://www.google.com',
-                privacyPolicyUrl: 'https://www.google.com',
-              ),
-              emailAuthOption: const EmailAuthOption(
-                enableMailLink: true,
-                handleURL: 'https://flutterauthuisample.page.link/test',
-                androidPackageName: 'com.example.flutter_auth_ui_sample',
-              ),
-            );
+            // 認証UIを開くボタン
+            ElevatedButton(
+              onPressed: () async {
+                final providers = [
+                  AuthUiProvider.email,
+                  AuthUiProvider.apple,
+                ];
 
-            print(result); // ログインに成功したらtrue
+                final result = await FlutterAuthUi.startUi(
+                  items: providers,
+                  tosAndPrivacyPolicy: TosAndPrivacyPolicy(
+                    tosUrl: 'https://www.google.com',
+                    privacyPolicyUrl: 'https://www.google.com',
+                  ),
+                  emailAuthOption: const EmailAuthOption(
+                    enableMailLink: true,
+                    handleURL: 'https://flutterauthuisample.page.link/test',
+                    androidPackageName: 'com.example.flutter_auth_ui_sample',
+                  ),
+                );
+                print(result); // ログインに成功したらtrue(何故かAndroidだとここに到達しない)
+              },
+              child: const Text('認証フローをスタート'),
+            ),
 
-            print(auth.currentUser?.email);
-
-            await auth.signOut();
-
-            print(auth.currentUser?.email);
-          },
-          child: const Text('open'),
+            // ログアウトボタン
+            ElevatedButton(
+              onPressed: isLogined
+                  ? () async {
+                      final auth = FirebaseAuth.instance;
+                      await auth.signOut();
+                      setState(() {
+                        isLogined = false;
+                      });
+                    }
+                  : null,
+              child: const Text('ログアウトする'),
+            ),
+          ],
         ),
       ),
     );
