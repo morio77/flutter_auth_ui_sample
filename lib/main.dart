@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
               emailAuthOption: const EmailAuthOption(
                 enableMailLink: true,
                 handleURL: 'https://flutterauthuisample.page.link/test',
+                androidPackageName: 'com.example.flutter_auth_ui_sample',
               ),
             );
 
