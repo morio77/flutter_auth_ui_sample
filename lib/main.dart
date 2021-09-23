@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 final providers = [
                   AuthUiProvider.email,
-                  AuthUiProvider.apple,
+                  AuthUiProvider.phone,
                 ];
 
                 final result = await FlutterAuthUi.startUi(
