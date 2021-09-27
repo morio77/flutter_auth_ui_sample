@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     androidPackageName: 'com.example.flutter_auth_ui_sample',
                   ),
                 );
-                print(result); // ログインに成功したらtrue(何故かAndroidだとここに到達しない)
+                print(result);
               },
               child: const Text('認証フローをスタート'),
             ),
