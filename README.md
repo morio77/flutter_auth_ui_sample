@@ -55,3 +55,45 @@
 ### Android固有
 
 1. main.dart内の`androidPackageName`を設定する
+
+---
+
+## 注意点 - Androidを使う上で
+
+リポジトリには反映済みだが、以下はポイントとなるので、抑えておく。
+
+### 1. [MainActivity.kt](https://github.com/morio77/flutter_auth_ui_sample/blob/main/android/app/src/main/kotlin/com/example/flutter_auth_ui_sample/MainActivity.kt)は以下のようにして、アプリ起動時に`FlutterAuthUiPlugin.catchEmailLink()`を呼ぶようにする
+
+```kt
+package com.example.flutter_auth_ui_sample
+
+import io.flutter.embedding.android.FlutterActivity
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.dr1009.app.flutter_auth_ui.FlutterAuthUiPlugin;
+
+class MainActivity : FlutterActivity() {
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState);
+
+        // check intent
+        FlutterAuthUiPlugin.catchEmailLink(this, getIntent());
+    }
+
+    
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent);
+
+        // check intent
+        FlutterAuthUiPlugin.catchEmailLink(this, intent);
+    }
+}
+```
+
+### 2. [AndroidManifest.xml](https://github.com/morio77/flutter_auth_ui_sample/blob/main/android/app/src/main/AndroidManifest.xml#L8)に記載の、`launchMode`を`singleInstance`にして、メールリンク認証の場合も、確実に[FlutterAuthUi.startUi()](https://github.com/morio77/flutter_auth_ui_sample/blob/main/lib/main.dart#L82)からリターンするようにする。
