@@ -2,7 +2,8 @@
 
 ## はじめに
 
-このパッケージは、[flutter_auth_ui](https://pub.dev/packages/flutter_auth_ui)を使用した、メールリンク認証のサンプルアプリです。
+このパッケージは、[flutter_auth_ui](https://pub.dev/packages/flutter_auth_ui)を使用した、メールリンク認証のサンプルアプリです。　　　　
+※事前準備については書いてませんが、電話認証もできます。
 
 ## 使い方-Firebase準備
 
